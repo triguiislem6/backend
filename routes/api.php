@@ -29,6 +29,6 @@ route::middleware('api')->group(function(){
 
     route::middleware('api')->group(function(){
         Route::Resource('/articles',ArticleController::class);
-        
-        
+        Route::get('/listarticles/{idscat}', [ArticleController::class,'showArticlesBySCAT']);
+        Route::get('/articles/art/articlespaginate', [ArticleController::class,'articlesPaginate']);
         });

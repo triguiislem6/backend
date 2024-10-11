@@ -94,4 +94,23 @@ class ArticleController extends Controller
             return response()->json("Sélection impossible {$e->getMessage()}");
             }
     }
+
+    public function articlesPaginate()
+{
+try {
+$perPage = request()->input('pageSize', 2);
+// Récupère la valeur dynamique pour la pagination
+$articles = Article :: with('scategorie')->paginate($perPage);
+
+// Retourne le resultat en format JSON API
+return response()->json([
+'products' => $articles->items(), // Les articles paginés
+'totalPages' => $articles->lastPage(), // Le nombre de pages
+]);
+} catch (\Exception $e) {
+return response()->json("Selection impossible {$e->getMessage()}");
+
+}
+
+}
 }
