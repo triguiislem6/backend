@@ -2,10 +2,10 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Categorie;
+use App\Models\Scategorie;
 use Illuminate\Http\Request;
 
-class CategorieController extends Controller
+class ScategorieController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -13,11 +13,11 @@ class CategorieController extends Controller
     public function index()
     {
         try{
-            $Categories=Categorie::all();
-            return response()->json($Categories);
+            $sCategories=Scategorie::with("categorie")->get();
+            return response()->json($sCategories);
         } catch(\Exception $e )
         {
-            return response()->json("probleme de categorie");}
+            return response()->json("probleme de scategorie");}
     }
 
     /**
@@ -26,23 +26,24 @@ class CategorieController extends Controller
     public function store(Request $request)
     {
         try{
-            $categorie= new Categorie(["nomcategorie"=>$request->input("nomcategorie"),"imagecategorie"=>$request->input("imagecategorie")]);
-            $categorie->save();
-            return response()->json($categorie);
+            $scategorie= new Scategorie(["nomscategorie"=>$request->input("nomscategorie"),"imagescategorie"=>$request->input("imagescategorie"),"categorieID"=>$request->input("categorieID")]);
+            $scategorie->save();
+            return response()->json($scategorie);
         } catch(\Exception $e )
         {
             return response()->json("insertion categorie probleme");}
     }
+    
 
     /**
      * Display the specified resource.
      */
-    public function show($id)
+    public function show( $id)
     {
         try{
-            $categorie= Categorie::findOrFail($id);
+            $scategorie= Scategorie::with("categorie")->findOrfail($id);
 
-            return response()->json($categorie);
+            return response()->json($scategorie);
         } catch(\Exception $e )
         {
             return response()->json("recuperation categorie impossible");}
@@ -54,27 +55,25 @@ class CategorieController extends Controller
     public function update(Request $request,  $id)
     {
         try{
-            $categorie= Categorie::findOrFail($id);
-            $categorie->update($request->all());
-            return response()->json($categorie);
+            $scategorie= Scategorie::findOrfail($id);
+            $scategorie->update($request->all());
+            return response()->json($scategorie);
         } catch(\Exception $e )
         {
             return response()->json($e->getMessage());}
     }
-    
 
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy($id)
+    public function destroy( $id)
     {
         try{
-            $categorie= Categorie::findOrFail($id);
-            $categorie->delete();
+            $scategorie= Scategorie::findOrfail($id);
+            $scategorie->delete();
             return response()->json("suppression categorie avec succes");
         } catch(\Exception $e )
         {
             return response()->json("suppression categorie impossible");}
     }
-
 }
